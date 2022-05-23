@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+	<UICulture>zh-CN</UICulture>
+    <TargetFramework>net5.0-windows</TargetFramework>
+	  <RootNamespace>LightChatting_GUI</RootNamespace>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="2.0.6" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
+    <PackageReference Include="Prism.Forms" Version="8.1.97" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <EmbeddedResource Remove="**/*.xaml" />
+	  <None Remove="Images\background.jpg" />
+	  <None Remove="Images\create_new.png" />
+	  <None Remove="Images\Join.png" />
+	  <None Remove="Images\setting.png" />
+	  <None Remove="Images\wechat-fill.png" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\background.jpg" />
+    <Resource Include="Images\create_new.png" />
+    <Resource Include="Images\Join.png" />
+    <Resource Include="Images\setting.png" />
+    <Resource Include="Images\wechat-fill.png" />
+  </ItemGroup>
+
+</Project>

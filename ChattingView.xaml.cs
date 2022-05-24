@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using System;
 using System.Windows.Threading;
 using System.ComponentModel;
+using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace LightChatting_GUI
 {
@@ -14,18 +16,19 @@ namespace LightChatting_GUI
     public partial class ChattingView : Window
     {
         private BackgroundWorker bgWorker = new();
-        public ChattingView()
+
+        public ChattingView( ref SettingDialogViewModel setting, int mode = 0 )
         {
             InitializeComponent();
+            // 窗口拖动
             this.Header.MouseLeftButtonDown += ( o, e ) => { DragMove(); };
+            // 创建VieweModel
+            ChattingViewModel chatting = new( ref setting, mode );
+            this.DataContext = chatting;
+            this.UsersList.ItemsSource = chatting.UsersList;
             // 开启一个线程负责Message的抓取与展示
             bgWorker.DoWork += ShowMessage;
             bgWorker.RunWorkerAsync();
-        }
-
-        private void Header_MouseLeftButtonDown( object sender, MouseButtonEventArgs e )
-        {
-            DragMove();
         }
         public void ShowMessage( object sender, DoWorkEventArgs e )
         {
@@ -40,9 +43,16 @@ namespace LightChatting_GUI
                     Application.Current.Dispatcher.Invoke(
                         () =>
                         {
-                            MessageView messageView = new MessageView();
+                            MessageView messageView = new();
                             messageView.Name.Content = messageHandle.name;
                             messageView.Message.Text = messageHandle.buffer;
+                            /*
+                            if ( Chatting.Name.ToString().Trim() == messageHandle.name.Trim() )
+                            {
+                                messageView.Message.Background = new SolidColorBrush(
+                                    Color.FromRgb( 177, 188, 230 ) );
+                            }
+                            */
                             stackPanel.Children.Add( messageView );
                         } );
 

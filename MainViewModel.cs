@@ -21,25 +21,18 @@ namespace LightChatting_GUI
             set => SetProperty( ref _name, value );
         }
 
-        private SettingDialogViewModel createSettting;
-        private SettingDialogViewModel joinSettting;
-        private SettingDialogView createSettingView = new()
-        {
-            DataContext = new SettingDialogViewModel()
-        };
-        private SettingDialogView joinSettingView = new()
-        {
-            DataContext = new SettingDialogViewModel()
-        };
-
+        private SettingDialogViewModel createSetting;
+        private SettingDialogViewModel joinSetting;
+        private SettingDialogView createSettingView = new();
+        private SettingDialogView joinSettingView = new();
         private async void ExecuteRunCreateDialog( object? _ )
         {
             //show the dialog
             var result = await DialogHost.Show( createSettingView, "SettingDialog", ClosingEventHandler );
             if ( result.ToString() == "Accept" )
             {
-                createSettting = (SettingDialogViewModel)createSettingView.DataContext;
-                Name = createSettting.DefaultName;
+                createSetting = createSettingView.setting;
+                Name = createSettingView.setting.DefaultName;
             }
         }
         private async void ExecuteRunJoinDialog( object? _ )
@@ -48,7 +41,7 @@ namespace LightChatting_GUI
             var result = await DialogHost.Show( joinSettingView, "SettingDialog", ClosingEventHandler );
             if ( result.ToString() == "Accept" )
             {
-                joinSettting = (SettingDialogViewModel)joinSettingView.DataContext;
+                joinSetting = joinSettingView.setting;
             }
         }
         private void ClosingEventHandler( object sender, DialogClosingEventArgs eventArgs )
@@ -57,34 +50,23 @@ namespace LightChatting_GUI
         }
         private void CreateChatting( object? _ )
         {
-            if ( createSettting == null || !createSettting.CanChatting )
+            if ( createSetting == null || !createSetting.CanChatting )
             {
                 ExecuteRunCreateDialog( null );
                 return;
             }
-            ChattingViewModel chatting = new( 
-                createSettting.IpAddress, createSettting.TruePort, Name );
-            ChattingView chattingView = new()
-            {
-                DataContext = chatting
-            };
+            ChattingView chattingView = new( ref createSetting, 0 );
             chattingView.ShowDialog();
         }
 
         private void JoinChatting( object? _ )
         {
-            if ( joinSettting == null || !joinSettting.CanChatting )
+            if ( joinSetting == null || !joinSetting.CanChatting )
             {
                 ExecuteRunJoinDialog( null );
                 return;
             }
-            ChattingViewModel chatting = new( 
-                joinSettting.IpAddress, joinSettting.TruePort, 
-                joinSettting.DefaultName, 1 );
-            ChattingView chattingView = new()
-            {
-                DataContext = chatting
-            };
+            ChattingView chattingView = new( ref joinSetting, 1 );
             chattingView.ShowDialog();
         }
 

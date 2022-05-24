@@ -11,32 +11,31 @@ namespace LightChatting_GUI.Common
     {
         public string remoteIP { get; set; }
         public int remotePort { get; set; }
-        public string Name { get; set; }
+        private User user;
+        public string Name { get => user.UserName; }
         public bool Connected { get
             {
                 return this.socket.Connected;
             } 
         }
 
+        private AddUserDel addDel;
         private IPEndPoint serverIpe;
         private Socket socket;
-        private List<string> remoteName = new();    // 存放其他远端主机用户的昵称，首项为Server昵称。
 
         private ManualResetEvent connectDone = new( false );
-        public ChattingClient( string ip, int port, string name )
+        public ChattingClient( string ip, int port, 
+            ref User user, AddUserDel addDel )
         {
             this.remoteIP = ip;
             this.remotePort = port;
-            this.Name = name;
-        }
-        public ChattingClient()
-        {
-
+            this.user = user;
+            this.addDel = addDel;
+            this.serverIpe = new( IPAddress.Parse( this.remoteIP ), this.remotePort );
+            this.socket = new( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
         }
         public void Connect()
         {
-            this.serverIpe = new( IPAddress.Parse( this.remoteIP ), this.remotePort );
-            this.socket = new( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
             this.socket.BeginConnect( this.serverIpe, asyncResult =>
             {
                 if ( !this.socket.Connected )
@@ -52,14 +51,12 @@ namespace LightChatting_GUI.Common
                     RSManager.Send( this.socket, this.Name );
                     // 接收Server的个人信息
                     string serverName = RSManager.Receive( this.socket );
-                    this.remoteName.Add( serverName );
                     connectDone.Set();
                     // 保持对Server的信息接收
                     RSManager.ReceiveAsync( this.socket, serverName );
                 }
             }, null );
             connectDone.WaitOne();
-
             return;
         }
 

@@ -10,7 +10,8 @@ namespace LightChatting_GUI.Common
     {
         public string IP { get; set; }
         public int Port { get; set; }
-        public string Name { get; set; }
+        private User user;
+        public String Name { get => user.UserName; }
         public bool Connected
         {
             get
@@ -19,28 +20,31 @@ namespace LightChatting_GUI.Common
             }
         }
         private Socket socket;
+        private AddUserDel addDel;
 
-        public ChattingServer(string ip, int port, string name )
+        public ChattingServer(string ip, int port, ref User user, AddUserDel addDel )
         {
             this.IP = ip;
             this.Port = port;
-            this.Name = name.Trim();
+            this.user = user;
+            this.addDel = addDel;
             // 创建套接字
             IPEndPoint ipe = new( IPAddress.Parse( this.IP ), this.Port );
-            socket = new( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
-            socket.Bind( ipe );
+            this.socket = new( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
+            this.socket.Bind( ipe );
             Debug.WriteLine( "[INFO] Server had been Initialized, watting connectting..." );
         }
 
         public void Listen()
         {
             socket.Listen( 100 );
-            ConnectManager.Accept( this.Name, this.socket, this.Send );
+            ConnectManager.Accept( this.Name, this.socket, 
+                this.Send, this.addDel );
             
         }
 
-        public void Send( string buffer, string sourceName=null, 
-            List<string>ignoreClinets=null, string targetName=null, int index=-1)
+        public void Send( string buffer, string sourceName = null,
+            List<string>ignoreClinets = null, string targetName = null, int index = -1)
         {
             string sendBuffer;
             if ( sourceName == null )
@@ -61,7 +65,7 @@ namespace LightChatting_GUI.Common
             }
             else 
             {
-                foreach ( string n in ConnectManager.usernames )
+                foreach ( string n in ConnectManager.clientNames )
                 {
                     if ( ignoreClinets != null && ignoreClinets.Contains( n ) )
                     {
@@ -75,7 +79,7 @@ namespace LightChatting_GUI.Common
         private static void SendTo(string name, string buffer )
         {
             Socket client;
-            if (ConnectManager.users.TryGetValue( name, out client ) )
+            if (ConnectManager.clients.TryGetValue( name, out client ) )
             {
                 RSManager.SendAsync( name, client, buffer );
             }
@@ -86,9 +90,9 @@ namespace LightChatting_GUI.Common
         }
         private static void SendTo(int index, string buffer )
         {
-            if(ConnectManager.usernames.Count > index )
+            if(ConnectManager.clientNames.Count > index )
             {
-                SendTo( ConnectManager.usernames[index], buffer );
+                SendTo( ConnectManager.clientNames[index], buffer );
             }
             else
             {

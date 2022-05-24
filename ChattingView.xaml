@@ -15,6 +15,7 @@
         Title="ChattingView" Height="510" Width="600"
         AllowsTransparency="True" WindowStyle="None"
         ResizeMode="NoResize">
+    
     <Grid x:Name="Room">
 
         <Grid.RowDefinitions>
@@ -80,30 +81,33 @@
                         MaxLength="150"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="{Binding Path=IsChecked, ElementName=MaterialDesignOutlinedTextBoxTextCountComboBox, Converter={StaticResource BooleanToVisibilityConverter}}"
                         VerticalScrollBarVisibility="Auto"
-                        materialDesign:HintAssist.Hint="Input message here that you want to send." Cursor="Arrow" >
+                        materialDesign:HintAssist.Hint="Input message here that you want to send." 
+                        Cursor="Arrow" >
                         <TextBox.Text>
-                            <Binding Path="Message" >
-                            </Binding>
+                            <Binding Path="Message" UpdateSourceTrigger="PropertyChanged"/>
                         </TextBox.Text>
                     </TextBox>
                     <Button Height="30"
                         Style="{StaticResource MaterialDesignRaisedLightButton}"
                         ToolTip="Resource name: MaterialDesignRaisedLightButton"
                         Content="Enter"
+                        IsDefault="True"
                         IsEnabled="{Binding ElementName=MessageBox, Path=Text.Length, Mode=OneWay}"
-                        Command="{Binding SendMessageCommand}" Cursor="Hand"/>
+                        Command="{Binding SendMessageCommand}"
+                        CommandParameter="{Binding ElementName=MessageBox}"
+                    Cursor="Hand"/>
                 </StackPanel>
             </Grid>
             <StackPanel Grid.Column="1" Orientation="Vertical">
                 <Label Content="All Users" 
                        Margin="5, 5, 0, 5"
                        FontSize="16"/>
-                <ListBox Grid.Column="1" Name="Users" 
+                <ListBox Grid.Column="1" Name="UsersList" 
                      BorderBrush="AntiqueWhite"
-                         ItemsSource="{Binding UserNames}">
+                         ItemsSource="{Binding UpdateSourceTrigger=PropertyChanged}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}"/>
+                            <TextBlock Text="{Binding UserName}"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

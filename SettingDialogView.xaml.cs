@@ -20,9 +20,12 @@ namespace LightChatting_GUI
     /// </summary>
     public partial class SettingDialogView : UserControl
     {
+        public SettingDialogViewModel setting;
         public SettingDialogView()
         {
             InitializeComponent();
+            setting = new SettingDialogViewModel();
+            this.DataContext = setting;
         }
         
     }

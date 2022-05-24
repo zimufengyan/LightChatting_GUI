@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LightChatting_GUI.Common
 {
-    public delegate void SendDel( string buffer, string sourceName=null, 
+    public delegate void SendDel( string buffer, string sourceName = null, 
         List<string> ignoreClinets = null, string name = null, int index = -1 );
 
     public struct RecieveHandle
@@ -31,7 +31,6 @@ namespace LightChatting_GUI.Common
             {
                 return;
             }
-            messageQuene.Enqueue( buffer );
             byte[] sendData = Encoding.UTF8.GetBytes( buffer );
             try
             {
@@ -40,13 +39,17 @@ namespace LightChatting_GUI.Common
                     asyncResult =>
                     {
                         int length = socket.EndSend( asyncResult );
+                        if (length > 0 )
+                        {
+                            messageQuene.Enqueue( buffer );
+                        }
                     }, null );
             }
             catch ( SocketException )
             {
                 // 删除该连接
                 ConnectManager.Delete( name );
-                Console.WriteLine( string.Format( "{0} had exited the room.", name ) );
+                Debug.WriteLine( string.Format( "{0} had exited the room.", name ) );
                 return;
             }
         }
@@ -119,9 +122,16 @@ namespace LightChatting_GUI.Common
             SendDel sendDel = null )
         {
             RecieveHandle handle = new( name, socket, sendDel );
-            Array.Clear( receivedData, 0, receivedData.Length );
-            socket.BeginReceive( receivedData, 0, receivedData.Length, SocketFlags.None,
-                new AsyncCallback( RSManager.ReceiveCallback ), handle );
+            try
+            {
+                Array.Clear( receivedData, 0, receivedData.Length );
+                socket.BeginReceive( receivedData, 0, receivedData.Length, SocketFlags.None,
+                    new AsyncCallback( RSManager.ReceiveCallback ), handle );
+            }
+            catch ( SocketException e )
+            {
+                Debug.WriteLine( e.Message );
+            }
         }
         private static void ReceiveCallback( IAsyncResult ar )
         {

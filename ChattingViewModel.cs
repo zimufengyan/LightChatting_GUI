@@ -2,9 +2,12 @@
 using System.Globalization;
 using System.Windows.Controls;
 using System.Threading;
+using System.ComponentModel;
+using System.Windows;
 
 namespace LightChatting_GUI
 {
+    public delegate void AddUserDel( string name );
     public class ChattingViewModel : ViewModelBase
     {
         public CommandBase SendMessageCommand => new( SendMessage );
@@ -31,12 +34,8 @@ namespace LightChatting_GUI
             set => SetProperty( ref mode, value );
         }
         private string message;
+        public string Message { get => message; set => SetProperty( ref message, value ); }
 
-        public string Message 
-        { 
-            get => message; 
-            set => SetProperty( ref message, value );
-        }
         private string roomInfo;
         public string RoomInfo
         {
@@ -44,26 +43,35 @@ namespace LightChatting_GUI
             set => SetProperty( ref roomInfo, value );
         }
 
-        public ChattingViewModel( string ip, int port, string name, int mode = 0 )
+        public BindingList<User> UsersList = new();
+
+        public ChattingViewModel( ref SettingDialogViewModel setting, int mode = 0 )
         {
             Mode = mode;
+            User user = new() { UserName = setting.DefaultName };
             if ( mode == 0 )
             {   // 创建Server
-                Server = new Common.ChattingServer( ip, port, name );
+                Server = new Common.ChattingServer( 
+                    setting.IpAddress, setting.TruePort, 
+                    ref user, this.AddUser );
+                this.UsersList.Add( user );
                 Server.Listen();
             }
             else
             {  // 创建Client
-                Client = new Common.ChattingClient( ip, port, name );
+                Client = new Common.ChattingClient(
+                    setting.IpAddress, setting.TruePort, 
+                    ref user, this.AddUser );
                 Client.Connect();
             }
-            RoomInfo = ip + ":" + port.ToString();
+            RoomInfo = setting.IpAddress + ":" + setting.Port;
             
         }
 
-        private void SendMessage(object? _ )
+        private void SendMessage( object obj )
         {
-            if (Mode == 0 )
+            TextBox box = obj as TextBox;
+            if ( Mode == 0 )
             {
                 Server.Send( Message );
             }
@@ -71,6 +79,19 @@ namespace LightChatting_GUI
             {
                 Client.Send( Message );
             }
+            box.Clear();
+        }
+
+        public void AddUser( string name )
+        {
+            foreach ( User user in UsersList )
+            {
+                if ( user.UserName == name )
+                {
+                    return;
+                }
+            }
+            UsersList.Add( new User() { UserName = name } );
         }
         public void CloseChatting( object? obj )
         {
@@ -85,6 +106,8 @@ namespace LightChatting_GUI
             var win = obj as System.Windows.Window;
             win.Close();
         }
+
+        
 
     }
 }

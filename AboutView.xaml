@@ -1,0 +1,92 @@
+﻿<Window x:Class="LightChatting_GUI.AboutView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:LightChatting_GUI" 
+        d:DataContext="{d:DesignInstance Type=local:AboutViewModel}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        mc:Ignorable="d"
+        AllowsTransparency="True" WindowStyle="None"
+        ResizeMode="NoResize"
+        Title="AboutView" Height="520" Width="420">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <materialDesign:ColorZone Grid.Row="0" x:Name="Header"
+            Mode="PrimaryLight" >
+            <StackPanel Orientation="Horizontal" 
+                        Height="50" >
+                <Button x:Name="CloseBtn"
+                    Style="{StaticResource MaterialDesignIconButton}"
+                    ToolTip="Close the About Page"
+                    Command="{Binding CloseCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+                    <Button.InputBindings>
+                        <KeyBinding Command="{Binding CloseCommand}" 
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                            Key="Esc"/>
+                    </Button.InputBindings>
+                    <materialDesign:PackIcon Kind="ArrowLeft" />
+                </Button>
+                <Label
+                    VerticalAlignment="Center"
+                    Margin="120 0 0 0"
+                    Content="About" 
+                    FontSize="18"
+                    FontWeight="Bold"/>
+            </StackPanel>
+        </materialDesign:ColorZone>
+        <Label Grid.Row="1" Margin="10, 10, 0, 0"
+               FontSize="18"
+               FontWeight="Bold"
+               Content="1. Introduction:"/>
+        <Label Grid.Row="2" Margin="30, 0, 0, 0"
+               FontSize="14"
+               FontWeight="Regular"
+               Content="LightChatting is a simple LAN chatting program."/>
+        <Label Grid.Row="3" Margin="10, 0, 0, 0"
+               FontSize="18"
+               FontWeight="Bold"
+               Content="1. Usage:"/>
+        <Label Grid.Row="4" Margin="30, 0, 0, 0"
+               FontSize="16"
+               FontWeight="Medium"
+               Content="(1). Create a new room(Server):"/>
+        <TextBlock Grid.Row="5" Margin="40, 0, 10, 0"
+               FontSize="14"
+               FontWeight="Regular"
+               TextWrapping="WrapWithOverflow"
+               Text="In the home page, click the 'Create' button, then following the tips fill the fields of Name, IP Address and Port for yourself. Click the 'Accept' button after confirming that the filling is correct. Then, you will be redirected to the chatting room. "/>
+        <Label Grid.Row="6" Margin="30, 0, 0, 0"
+               FontSize="16"
+               FontWeight="Medium"
+               Content="(2). Join a existing room(Client):"/>
+        <TextBlock Grid.Row="7" Margin="40, 0, 10, 0"
+               FontSize="14"
+               FontWeight="Regular"
+               TextWrapping="WrapWithOverflow"
+               Text="In the home page, click the 'Join' button, then  following the tips fill the fields of Name for yourself, IP Address and Port for remote Server. Click the 'Accept' button after confirming that the filling is correct. Then, you will be redirected to the chatting room. "/>
+        <Label Grid.Row="8" Margin="10, 5, 0, 0"
+               FontSize="18"
+               FontWeight="Bold"
+               Content="3. Author:"/>
+        <Label Grid.Row="9" Margin="30, 0, 0, 0"
+               FontSize="14"
+               FontWeight="Regular"
+               Content="by 'zmfy' and 'hao'."/>
+
+    </Grid>
+</Window>

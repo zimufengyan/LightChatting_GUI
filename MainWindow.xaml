@@ -1,0 +1,146 @@
+﻿<Window x:Class="LightChatting_GUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:LightChatting_GUI" 
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        mc:Ignorable="d" Title="LightChatting"
+        AllowsTransparency="True" WindowStyle="None"
+        Height="395" Width="600" ResizeMode="NoResize">
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}"
+                        Executed="MinimizeWindow_Exec"/>
+        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}"
+                        Executed="CloseWindow_Exec"/>
+    </Window.CommandBindings>
+
+    <materialDesign:DialogHost Identifier="SettingDialog">
+        <materialDesign:DialogHost.DialogContent >
+            <local:SettingDialogView/>
+        </materialDesign:DialogHost.DialogContent>
+
+        <Grid Name="MainGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="235"/>
+                <RowDefinition Height="105"/>
+            </Grid.RowDefinitions>
+            <materialDesign:ColorZone Grid.Row="0" x:Name="Header"
+                                      Mode="PrimaryLight" Height="60">
+                <Canvas >
+                    <Image x:Name="Logo" Width="40" Canvas.Top="11"
+                        Canvas.Left="15"
+                        Source="pack://application:,,,/Images/CHAT.png"/>
+                    <Label Canvas.Left="60" Canvas.Top="11" 
+                        Content="LightChatting" Foreground="#FFF7EFEF"
+                        FontFamily="Times New Roman" 
+                        FontSize="24" FontWeight="Bold"/>
+                    <Label Canvas.Right="120" Canvas.Top="14"
+                        Foreground="#FFF7EFEF"
+                        Content="{Binding Name}"
+                        FontSize="18" FontFamily="SimSun" 
+                        FontWeight="Normal"/>
+                    <Button
+                          Style="{StaticResource MaterialDesignIconButton}"
+                          ToolTip="Minimize the Window"
+                          Canvas.Right="50" Canvas.Top="16"
+                          Height="25" Width="30"
+                          Command="{x:Static SystemCommands.MinimizeWindowCommand}" Cursor="Hand"
+                          >
+                        <Image Source="pack://application:,,,/Images/minus.png"/>
+                    </Button>
+                    <Button
+                          Style="{StaticResource MaterialDesignIconButton}"
+                          ToolTip="Exit the program"
+                          Canvas.Right="15" Canvas.Top="16"
+                          Height="25" Width="30"
+                          Command="{x:Static SystemCommands.CloseWindowCommand}" Cursor="Hand" 
+                          >
+                        <Image Source="pack://application:,,,/Images/exit.png"/>
+                    </Button>
+                        
+                </Canvas>
+            </materialDesign:ColorZone>
+            <Image Grid.Row="1" Grid.RowSpan="2" x:Name="img" Margin="0, -5, 0, 0"
+            Source="pack://application:,,,/Images/background.jpg" Grid.ColumnSpan="2"/>
+            <Grid Grid.Row="2" Name="Content" 
+                    Margin="0, 0, 0, 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <Button
+                    Margin="20, 0, 10, 5"
+                    Style="{StaticResource MaterialDesignRaisedLightButton}"
+                    Height="100" Width="180"
+                    materialDesign:ButtonAssist.CornerRadius="5"
+                    ToolTip="Create a new chatting room."
+                    materialDesign:ShadowAssist.ShadowDepth="Depth4"
+                    Command="{Binding CreateChatingCommand}">
+                    <Button.InputBindings>
+                        <KeyBinding Key="N" Modifiers="Ctrl"
+                                    Command="{Binding CreateChatingCommand}"/>
+                    </Button.InputBindings>
+                    <StackPanel Orientation="Vertical">
+                        <Image Height="40" Width="60" Margin="0, -15, 0, 0"
+                        Source="pack://application:,,,/Images/create_new.png"/>
+                        <TextBlock Text="Create" TextAlignment="Center"
+                                   FontFamily="SimSun" FontSize="18"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="1"
+                        Margin="10, 0, 10, 5"
+                        Style="{StaticResource MaterialDesignRaisedLightButton}"
+                        Height="100" Width="180"
+                        materialDesign:ButtonAssist.CornerRadius="5"
+                        ToolTip="Join a existting chatting room."
+                        materialDesign:ShadowAssist.ShadowDepth="Depth4"
+                        Command="{Binding JoinChattingCommand}">
+                    <Button.InputBindings>
+                        <KeyBinding Key="J" Modifiers="Ctrl"
+                            Command="{Binding JoinChattingCommand}"/>
+                    </Button.InputBindings>
+                    <StackPanel Orientation="Vertical">
+                        <Image Height="40" Width="60" Margin="0, -15, 0, 0"
+                        Source="pack://application:,,,/Images/Join.png"/>
+                        <TextBlock Text="Join" TextAlignment="Center"
+                                   FontFamily="SimSun" FontSize="18"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="2"
+                        Margin="10, 0, 20, 5"
+                        Style="{StaticResource MaterialDesignRaisedLightButton}"
+                        Height="100" Width="180"
+                        materialDesign:ButtonAssist.CornerRadius="5"
+                        ToolTip="About Page"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth4"
+                        Command="{Binding ShowAboutCommand}">
+                    <Button.InputBindings>
+                        <KeyBinding Key="B" Modifiers="Ctrl"
+                            Command="{Binding ShowAboutCommand}" />
+                    </Button.InputBindings>
+                        
+                    <StackPanel Orientation="Vertical">
+                        <Image Height="40" Width="60" Margin="0, -15, 0, 0"
+                            Source="pack://application:,,,/Images/about.png"/>
+                        <TextBlock Text="About" TextAlignment="Center"
+                                       FontFamily="SimSun" FontSize="18"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Grid>
+    </materialDesign:DialogHost>
+
+
+
+</Window>

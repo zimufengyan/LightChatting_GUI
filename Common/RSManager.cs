@@ -41,7 +41,10 @@ namespace LightChatting_GUI.Common
                         int length = socket.EndSend( asyncResult );
                         if (length > 0 )
                         {
-                            messageQuene.Enqueue( buffer );
+                            if ( name != ConnectManager.userNames[0] )
+                            {
+                                messageQuene.Enqueue( buffer );
+                            }
                         }
                     }, null );
             }

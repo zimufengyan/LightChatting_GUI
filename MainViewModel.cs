@@ -1,11 +1,9 @@
-﻿using System;
-using System.Net.Sockets;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows.Input;
+﻿/*
+ * MainWindow的ViewModel文件
+ * 完成MianWindow的命令绑定、数据交互，实现与用户的交互逻辑
+ */
+
 using MaterialDesignThemes.Wpf;
-using System.Threading;
-using System.Windows;
 
 namespace LightChatting_GUI
 {

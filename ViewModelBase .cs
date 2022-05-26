@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * ViewModel的基类
+ * 实现INotifyPropertyChanged完成属性更新的通知
+ */
+
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 

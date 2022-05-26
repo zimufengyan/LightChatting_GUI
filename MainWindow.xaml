@@ -54,7 +54,7 @@
                           ToolTip="Minimize the Window"
                           Canvas.Right="50" Canvas.Top="16"
                           Height="25" Width="30"
-                          Command="{x:Static SystemCommands.MinimizeWindowCommand}" Cursor="Hand"
+                          Command="{x:Static SystemCommands.MinimizeWindowCommand}"
                           >
                         <Image Source="pack://application:,,,/Images/minus.png"/>
                     </Button>
@@ -63,7 +63,7 @@
                           ToolTip="Exit the program"
                           Canvas.Right="15" Canvas.Top="16"
                           Height="25" Width="30"
-                          Command="{x:Static SystemCommands.CloseWindowCommand}" Cursor="Hand" 
+                          Command="{x:Static SystemCommands.CloseWindowCommand}" 
                           >
                         <Image Source="pack://application:,,,/Images/exit.png"/>
                     </Button>

@@ -51,18 +51,19 @@ namespace LightChatting_GUI.Common
             if ( sourceName == null )
             {
                 sendBuffer = this.Name + "#" + buffer;
+                RSManager.messageQuene.Enqueue( sendBuffer );
             }
             else
             {
                 sendBuffer = sourceName +  "#" + buffer;
             }
-            if (index != -1 )
+            if ( index != -1 )
             {
-                SendTo( index, sendBuffer );
+                SendTo( index, sendBuffer, this.Name );
             }
-            else if (targetName != null )
+            else if ( targetName != null )
             {
-                SendTo( targetName, sendBuffer );
+                SendTo( targetName, sendBuffer, this.Name );
             }
             else 
             {
@@ -72,28 +73,28 @@ namespace LightChatting_GUI.Common
                     {
                         continue;
                     }
-                    SendTo( n, sendBuffer );
+                    SendTo( n, sendBuffer, this.Name );
                 }
             }
         }
 
-        private static void SendTo(string name, string buffer )
+        private static void SendTo( string name, string buffer, string sourceName )
         {
             Socket client;
             if (ConnectManager.users.TryGetValue( name, out client ) )
             {
-                RSManager.SendAsync( name, client, buffer );
+                RSManager.SendAsync( sourceName, client, buffer );
             }
             else
             {
                 Debug.WriteLine( string.Format( "[IRROR] this client of {0} is not existing.", name ) );
             }
         }
-        private static void SendTo(int index, string buffer )
+        private static void SendTo(int index, string buffer, string sourceName )
         {
             if(ConnectManager.userNames.Count > index )
             {
-                SendTo( ConnectManager.userNames[index], buffer );
+                SendTo( ConnectManager.userNames[index], buffer, sourceName );
             }
             else
             {

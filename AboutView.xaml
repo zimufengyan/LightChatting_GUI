@@ -5,13 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:LightChatting_GUI" 
-        d:DataContext="{d:DesignInstance Type=local:AboutViewModel}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         mc:Ignorable="d"
         AllowsTransparency="True" WindowStyle="None"
         ResizeMode="NoResize"
         Title="AboutView" Height="520" Width="420">
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}"
+                        Executed="CloseWindow_Exec"/>
+    </Window.CommandBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -32,13 +35,8 @@
                 <Button x:Name="CloseBtn"
                     Style="{StaticResource MaterialDesignIconButton}"
                     ToolTip="Close the About Page"
-                    Command="{Binding CloseCommand}"
+                    Command="{x:Static SystemCommands.CloseWindowCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
-                    <Button.InputBindings>
-                        <KeyBinding Command="{Binding CloseCommand}" 
-                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-                            Key="Esc"/>
-                    </Button.InputBindings>
                     <materialDesign:PackIcon Kind="ArrowLeft" />
                 </Button>
                 <Label

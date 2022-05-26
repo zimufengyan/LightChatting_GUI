@@ -25,8 +25,13 @@ namespace LightChatting_GUI
             InitializeComponent();
             // 窗口拖动
             this.Header.MouseLeftButtonDown += ( o, e ) => { DragMove(); };
-            this.DataContext = new AboutViewModel();
         }
+
+        private void CloseWindow_Exec( object sender, ExecutedRoutedEventArgs e )
+        {
+            SystemCommands.CloseWindow( this );
+        }
+
 
     }
 }

@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿/*
+ * ChattingView的ViewModel文件
+ * 完成聊天窗口的命令绑定、数据交互，实现与用户的交互逻辑
+ */
+
 using System.Windows.Controls;
-using System.Threading;
 using System.ComponentModel;
-using System.Windows;
 
 namespace LightChatting_GUI
 {

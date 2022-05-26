@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * 关于设置对话框的ViewModel文件
+ * 完成对话框的字段数据绑定和输入验证
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;

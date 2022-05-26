@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Command的基类
+ * 实现ICommand接口，完成命令的创建、执行判断和执行
+ */
+
+using System;
 using System.Windows.Input;
 
 namespace LightChatting_GUI
